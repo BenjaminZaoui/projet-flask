@@ -44,3 +44,4 @@ jobs:
       # 7️⃣ Lancer les tests automatiques avec pytest
       - name: Run tests
         run: python -m pytest
+        
