@@ -1,4 +1,4 @@
-name: CI Pipeline - Flask
+name: Flask CI
 
 on:
   push:
@@ -7,31 +7,40 @@ on:
     branches: [ main ]
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧰 Checkout du code
-        uses: actions/checkout@v4
+      # 1️⃣ Récupérer le code du dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: 🐍 Installer Python
-        uses: actions/setup-python@v5
+      # 2️⃣ Installer Python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: 3.10
 
-      - name: 📦 Installer les dépendances
+      # 3️⃣ Mettre à jour pip
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      # 4️⃣ Installer les dépendances
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 5️⃣ Démarrer le serveur Flask en arrière-plan
+      - name: Run Flask server
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          export FLASK_APP=app.py
+          export FLASK_ENV=development
+          flask run &
+          sleep 5   # attendre que le serveur démarre
 
-      - name: 🚀 Lancer le serveur en arrière-plan
-        run: |
-          python app.py &
-          sleep 3  # attendre que le serveur démarre
+      # 6️⃣ Tester le serveur avec curl
+      - name: Test server with curl
+        run: curl http://127.0.0.1:5000/
 
-      - name: 🔍 Test avec curl
-        run: |
-          curl -f http://127.0.0.1:5000
-
-      - name: ✅ Exécuter les tests automatiques
-        run: pytest -v
+      # 7️⃣ Lancer les tests automatiques avec pytest
+      - name: Run tests
+        run: python -m pytest
