@@ -27,7 +27,8 @@ jobs:
 
       # Installer les dépendances
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install flask
+
 
       # Démarrer le serveur Flask en arrière-plan
       - name: Run Flask server
