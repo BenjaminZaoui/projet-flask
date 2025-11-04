@@ -27,8 +27,9 @@ jobs:
 
       # Installer les dépendances
       - name: Install dependencies
-        run: pip install flask
-        run: pip install pytest
+        run: |
+         pip install flask
+         pip install pytest
 
 
 
