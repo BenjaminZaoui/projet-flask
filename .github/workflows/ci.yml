@@ -31,12 +31,12 @@ jobs:
 
 
       # Démarrer le serveur Flask en arrière-plan
-      - name: Run Flask server
+      - name: Run Flask server in background
         run: |
-          export FLASK_APP=app.py
-          export FLASK_ENV=development
-          flask run &
-          sleep 5   # attendre que le serveur démarre
+         export FLASK_APP=app.py
+         flask run --host=0.0.0.0 --port=5000 --no-debugger &
+         sleep 5  # attends que le serveur démarre
+
 
       # Tester le serveur avec curl
       - name: Test server with curl
